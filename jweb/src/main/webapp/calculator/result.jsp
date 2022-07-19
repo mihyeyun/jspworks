@@ -14,9 +14,20 @@
 		<hr>
 		<%
 			//입력된 문자를 숫자로 변환
-			int num1 = Integer.parseInt(request.getParameter("num1"));
+			String str1 = request.getParameter("num1");
+			String str2 = request.getParameter("num2");
+			int num1 =0, num2 =0;
+			String op="";
+			if(str1.equals("") || str2.equals("")){
+				out.println("값을 입력해주세요");
+			}else{
+				num1 = Integer.parseInt(str1);
+				num2 = Integer.parseInt(str2);
+				op = request.getParameter("op");
+			}
+			/*int num1 = Integer.parseInt(request.getParameter("num1"));
 			int num2 = Integer.parseInt(request.getParameter("num2"));
-			String op = request.getParameter("op");
+			String op = request.getParameter("op");*/
 			
 			Calculator calc = new Calculator();
 			calc.setNum1(num1); //num1 설정
