@@ -1,0 +1,8 @@
+@charset "UTF-8";
+*{margin: 0; padding: 0}
+.container{ box-sizing: borderbox; height: 20vh; display: flex}
+.logo{background: red; height:100%; display: inline-block; flex: 20%}
+nav{ height:100%; background: yellow; margin: 0 auto; display: inline-block; flex: 60%}
+.list_wrap{display: flex; justify-content: space-around; }
+.depth1{display: inline-block;  }
+.loginform{ background: blue; height: 100%; display: inline-block; display: float-right; flex: 20%}
