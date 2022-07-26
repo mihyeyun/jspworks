@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.common.JDBCUtil;
 
 public class AddrBookDAO {
+	/* private ArrayList<AddrBook> addrList = new ArrayList<>(); */
 	//jdbc 관련 변수
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
@@ -38,7 +39,7 @@ public class AddrBookDAO {
 	public ArrayList<AddrBook> getListAll(){
 		ArrayList<AddrBook> addrList = new ArrayList<>();
 		conn = JDBCUtil.getConnection();
-		String sql = "SELECT * FROM t_address";
+		String sql = "SELECT * FROM t_address ORDER BY num ASC";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -58,5 +59,33 @@ public class AddrBookDAO {
 			JDBCUtil.close(conn, pstmt, rs);
 		}
 		return addrList;
+	}//목록 닫기
+	
+	//로그인 체크
+	
+	public boolean checkLogin(String email) {
+		conn = JDBCUtil.getConnection();
+		String sql = "SELECT email FROM t_address WHERE email = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return true;	//이메일 일치
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(conn, pstmt, rs);
+		}
+		return false; //이메일 불일치
 	}
+	
+	/*
+	 * //상세보기 public AddrBook getAbByUserName(String username) { AddrBook
+	 * abByUsername = null; for(int i=0; i<addrList.size(); i++) { AddrBook ab =
+	 * addrList.get(i); String dbUser = ab.getUsername();
+	 * if(dbUser.equals(username)) { abByUsername = ab; break; } } return
+	 * abByUsername; }
+	 */
 }
