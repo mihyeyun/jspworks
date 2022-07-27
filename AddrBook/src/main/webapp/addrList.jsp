@@ -30,7 +30,7 @@
 				<td><%=addrBook.getEmail() %></td>
 				<td><%=addrBook.getGender() %></td>
 				<td><%=addrBook.getJoinDate() %></td>
-				<td><a href="./addrView.jsp?username=<%=addrBook.getUsername() %>">
+				<td><a href="./addrView.jsp?num=<%=addrBook.getNum() %>">
 					<button type="button">보기</button></a></td>
 			</tr>
 			<% } %>
