@@ -9,14 +9,14 @@
 <title>회원 목록</title>
 <link rel="stylesheet" href="./resources/css/common.css">
 </head>
-<jsp:useBean id="memberDAO" class="com.repository.MemberDAO" scope="application" />
+<%-- <jsp:useBean id="memberDAO" class="com.repository.MemberDAO" scope="application" /> --%>
 <body>
 	<jsp:include page="./menu.jsp" />
 	<div id="container">
 		<div class="title">
 			<h1>회원 목록</h1>
 		</div>
-		<div style="margin-bottom: 20px; text-align: right; margin-right:25%">
+		<div style="margin-bottom: 20px; text-align: right; margin-right:35%">
 			<p><a href="/logout.do">[관리자 로그아웃]</a>
 		</div>
 		<div>
@@ -40,7 +40,7 @@
 						<td><c:out value="${member.gender}" /></td>
 						<td><c:out value="${member.joinDate}" /></td>
 						<td>
-							<a href="./deleteProcess.jsp?memberId=<c:out value="${member.memberId}" />"
+							<a href="./deleteMember.do?memberId=<c:out value="${member.memberId}" />"
 							   onclick="return confirm('정말로 삭제하시겠습니까?')">
 								<button type="button">삭제</button>
 							</a>

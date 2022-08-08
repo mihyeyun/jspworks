@@ -35,24 +35,26 @@
 		%>
 		<div>
 		<form action="./updateBoard.jsp" method="post">
+			<input type="hidden" name="bnum" value="<%=board.getBnum() %>">
 			<table class="tbl_bo_view">
 				<tr>
 					<td>제목</td>
-					<td><input type="text" name="title" value="<%=board.getTitle()%>"></td>
+					<td><input type="text" name="title" class="bo_v_title" value="<%=board.getTitle()%>"></td>
 				</tr>
 				<tr>
 					<td>글쓴이</td>
-					<td><input type="text" name="memberId" value="<%=board.getMemberId()%>"></td>
+					<td><input type="text" name="memberId" class="bo_v_id" value="<%=board.getMemberId()%>"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea rows="15" cols="80" name="memberId"><%=board.getContent() %></textarea></td>
+					<td><textarea rows="15" cols="80" name="content"><%=board.getContent() %></textarea></td>
 				</tr>
 				<tr>
 					<td colspan="2">
 					<% if(memberId != null && memberId.equals(board.getMemberId())){ %>
 						<input type="submit" value="수정">
-						<a href="./deleteBoard.jsp?bnum=<%=board.getBnum() %>">
+						<a href="./deleteBoard.jsp?bnum=<%=board.getBnum() %>"
+							onclick="return confirm('정말로 삭제하시겠습니까?')">
 						<input type="button" value="삭제"></a>
 					<% } %>
 						<a href="./boardList.jsp"><input type="button" value="목록"></a>
