@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.repository.Board;
+import com.repository.BoardDAO;
 import com.repository.Member;
 import com.repository.MemberDAO;
 
@@ -22,9 +24,11 @@ public class MainController extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 	
 	MemberDAO memberDAO;
+	BoardDAO boardDAO;
 
 	public void init(ServletConfig config) throws ServletException {
 		memberDAO = new MemberDAO();
+		boardDAO = new BoardDAO();
 	}
 
 
@@ -91,8 +95,13 @@ public class MainController extends HttpServlet {
 			String memberId = request.getParameter("memberId");
 			String passwd = request.getParameter("passwd");
 			
+			//객체 생성
+			Member member = new Member();
+			member.setMemberId(memberId);
+			member.setPasswd(passwd);
+			
 			//db 처리
-			boolean loginResult = memberDAO.checkLogin(memberId, passwd);
+			boolean loginResult = memberDAO.checkLogin(member);
 			String name = memberDAO.getNameByLogin(memberId);
 			
 			if(loginResult){
@@ -143,8 +152,57 @@ public class MainController extends HttpServlet {
 			memberDAO.updateMember(member);
 			request.setAttribute("msg", "update");
 			nextPage = "/memberResult.jsp";
-		}
+		}else if(command.equals("/boardList.do")) {	//게시판 목록 페이지 요청
 			
+			//게시글 목록 db 처리
+			ArrayList<Board> boardList = boardDAO.getListAll();
+			
+			//model - 데이터
+			request.setAttribute("boardList", boardList);
+			nextPage = "/board/boardList.jsp";
+		}else if(command.equals("/writeForm.do")) {	//글쓰기 페이지 요청
+			nextPage = "/board/writeForm.jsp";
+		}else if(command.equals("/writeProcess.do")) {	//글쓰기 처리 요청
+			//name 속성 값 가져오기
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			//작성자는 로그인한 멤버 - 세션을 이용
+			String memberId = (String)session.getAttribute("sessionId");
+			
+			Board board = new Board();
+			board.setTitle(title);
+			board.setContent(content);
+			board.setMemberId(memberId);
+			
+			boardDAO.insertBoard(board);
+			
+			nextPage = "/boardList.do";  //do로 목록 요청
+		}else if(command.equals("/boardView.do")) {
+			int bnum = Integer.parseInt(request.getParameter("bnum"));
+			Board board = boardDAO.getBoard(bnum);
+			request.setAttribute("board", board);	//model - board
+			nextPage = "/board/boardView.jsp";	//이동 페이지
+		}else if(command.equals("/deleteBoard.do")) {
+			int bnum = Integer.parseInt(request.getParameter("bnum"));
+			boardDAO.deleteBoard(bnum);	//삭제처리
+			request.setAttribute("msg", "bo_delete");	//msg - model 생성
+			nextPage = "/memberResult.jsp";
+		}else if(command.equals("/updateBoard.do")) {
+			int bnum = Integer.parseInt(request.getParameter("bnum"));
+			String title = request.getParameter("title");
+			String content = request.getParameter("content");
+			
+			Board board = new Board();
+			board.setBnum(bnum);
+			board.setTitle(title);
+			board.setContent(content);
+			
+			boardDAO.updateBoard(board);
+			
+			request.setAttribute("msg", "bo_update");	//msg - model 생성
+			nextPage = "/memberResult.jsp";
+		}
+		
 		
 		
 		
