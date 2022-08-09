@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.common.JDBCUtil;
 
-public class BoardDAO {
+public class BoardDAO2 {
 	
 	Connection conn = null;	//db연결 객체
 	PreparedStatement pstmt = null;	//sql 처리
@@ -18,8 +18,8 @@ public class BoardDAO {
 	public void insertBoard(Board board) {
 		try {
 			conn = JDBCUtil.getConnection();
-			String sql = "INSERT INTO t_board(title, content, memberId)"
-					+ " VALUES (?, ?, ?)";
+			String sql = "INSERT INTO t_board(bnum, title, content, memberId)"
+					+ " VALUES (b_seq.NEXTVAL, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getTitle()); //폼에 입력 데이터를 db에 저장
 			pstmt.setString(2, board.getContent()); 
