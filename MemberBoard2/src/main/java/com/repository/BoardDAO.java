@@ -18,8 +18,8 @@ public class BoardDAO {
 	public void insertBoard(Board board) {
 		try {
 			conn = JDBCUtil.getConnection();
-			String sql = "INSERT INTO t_board(title, content, memberId)"
-					+ " VALUES (?, ?, ?)";
+			String sql = "INSERT INTO t_board(bnum, title, content, memberId)"
+					+ " VALUES (b_seq.NEXTVAL, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getTitle()); //폼에 입력 데이터를 db에 저장
 			pstmt.setString(2, board.getContent()); 
@@ -49,6 +49,7 @@ public class BoardDAO {
 			board.setContent(rs.getString("content"));
 			board.setRegDate(rs.getDate("regdate"));
 			board.setMemberId(rs.getString("memberId"));
+			board.setHit(rs.getInt("hit"));
 			
 			boardList.add(board);
 		}
@@ -83,6 +84,34 @@ public class BoardDAO {
 		}
 		return board;
 	}
+	
+	//조회수 처리
+	public void updateHit(int bnum) {
+		try {
+			conn = JDBCUtil.getConnection();
+			String sql = "SELECT hit FROM t_board WHERE bnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bnum);
+			rs = pstmt.executeQuery();
+			int hit = 0;
+			if(rs.next()) {
+				hit = rs.getInt("hit") + 1;	//조회수 1 증가
+			}
+			
+			//조회수 update 처리
+			sql = "UPDATE t_board SET hit=? WHERE bnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, hit);
+			pstmt.setInt(2, bnum);
+			pstmt.executeUpdate();	//실행 메소드 처리
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(conn, pstmt, rs);
+		}
+	}
+	
 	
 	//게시글 삭제
 	public void deleteBoard(int bnum) {
